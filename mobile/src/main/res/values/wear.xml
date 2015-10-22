@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="android_wear_capabilities">
+        <item>receive_heart_rate_data</item>
+        <item>receive_heart_rate_status</item>
+    </string-array>
+</resources>

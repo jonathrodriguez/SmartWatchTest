@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.wearable.view.BoxInsetLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/container"
+    tools:context=".MainActivity"
+    tools:deviceIds="wear"
+    android:background="#673ab7">
+
+    <ToggleButton
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:id="@+id/toggle"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:src="@android:drawable/stat_notify_sync"
+        android:background="@drawable/start_button"
+        android:textOff=" "
+        android:textOn=" "
+        android:checked="false" />
+
+    <TextView android:id="@+id/text" app:layout_box="all" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal" />
+
+</android.support.wearable.view.BoxInsetLayout>

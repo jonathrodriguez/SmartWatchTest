@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SWtest</string>
+    <string name="hello_world">Hello World!</string>
+    <string name="ppm">%d ppm</string>
+</resources>
