@@ -2,6 +2,7 @@ package es.jrodriguez.swtest;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements MessageApi.Messag
         mSwitch = (Switch)findViewById(R.id.switch1);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API).build();
+        mGoogleApiClient.connect();
 
         Wearable.MessageApi.addListener(mGoogleApiClient,this);
     }
@@ -45,14 +47,22 @@ public class MainActivity extends AppCompatActivity implements MessageApi.Messag
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
+        String received_data = "";
+        byte[] dataArray = messageEvent.getData();
+        for (byte byt : dataArray) {
+            received_data = received_data + ((received_data.isEmpty())?"":":") + String.format("%2X",byt);
+        }
+        Log.d("Receive",messageEvent.getPath().concat(" - ").concat(received_data));
         if (messageEvent.getPath().equals(MESSAGE_PATH_SHOW_HEART_RATE_DATA)) {
             ByteBuffer b = ByteBuffer.allocate(4);
-            b.put(messageEvent.getData());
+            b.put(dataArray);
+            b.position(0);
             int data = b.getInt();
             updateText(data);
         } else if (messageEvent.getPath().equals(MESSAGE_PATH_SHOW_HEART_RATE_STATUS)) {
             ByteBuffer b = ByteBuffer.allocate(1);
-            b.put(messageEvent.getData());
+            b.put(dataArray);
+            b.position(0);
             updateStatus((b.get() == 1));
         }
     }

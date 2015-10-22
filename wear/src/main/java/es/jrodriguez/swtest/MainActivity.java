@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.BoxInsetLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -27,6 +28,7 @@ import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Set;
 
 public class MainActivity extends WearableActivity implements SensorEventListener {
@@ -120,9 +122,9 @@ public class MainActivity extends WearableActivity implements SensorEventListene
             if (mHeartRateSensor != null) {
                 mSensorManager.registerListener(this, mHeartRateSensor, SensorManager.SENSOR_DELAY_FASTEST);
             } else {
-                computedHeartRate = 0;
+                computedHeartRate = (new Random()).nextInt(240);
                 updateText();
-                sendHeartRateData(0);
+                sendHeartRateData(computedHeartRate.intValue());
             }
             sendHeartRateStatus(true);
         }
@@ -174,6 +176,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 
     private void setupHostConnection() {
         mGoogleApiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API).build();
+        mGoogleApiClient.connect();
 
                 Wearable.CapabilityApi.getCapability(mGoogleApiClient,
                         CAPABILITY_SHOW_HEART_RATE_DATA,
@@ -276,6 +279,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 
     private void sendHeartRateData(int data) {
         if (hostNodeId != null) {
+            Log.d("Send","Data: "+data);
             ByteBuffer b = ByteBuffer.allocate(4);
             b.putInt(data);
             Wearable.MessageApi.sendMessage(mGoogleApiClient, hostNodeId,
@@ -285,6 +289,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 
     private void sendHeartRateStatus(boolean data) {
         if (hostNodeId != null) {
+            Log.d("Send","Status: "+data);
             ByteBuffer b = ByteBuffer.allocate(1);
             b.put((byte) ((data)?1:0));
             Wearable.MessageApi.sendMessage(mGoogleApiClient, hostNodeId,
